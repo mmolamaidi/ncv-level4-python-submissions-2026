@@ -1,0 +1,509 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Queens College | Student Management</title>
+
+<style>
+:root {
+    --dark: #30104b;
+    --purple: #542477;
+    --medium: #75449b;
+    --light: #a77bc8;
+    --pale: #eee3f7;
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eee3f7, #d4bce9);
+    color: var(--dark);
+}
+
+header {
+    background: linear-gradient(120deg, #30104b, #75449b);
+    color: white;
+    text-align: center;
+    padding: 30px 15px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 32px;
+    letter-spacing: 2px;
+}
+
+header p {
+    margin-bottom: 0;
+    color: #e6d6f2;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px #54247720;
+}
+
+h2 {
+    color: var(--purple);
+    margin-top: 0;
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+button {
+    background: var(--purple);
+    color: white;
+    border: none;
+    padding: 13px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: var(--dark);
+    transform: translateY(-2px);
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 15px;
+    border: 1px solid #cbb3dd;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: 2px solid var(--light);
+}
+
+.action {
+    display: none;
+}
+
+.action.active {
+    display: block;
+}
+
+.result {
+    background: var(--pale);
+    border-left: 5px solid var(--medium);
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th {
+    background: var(--purple);
+    color: white;
+    padding: 13px;
+}
+
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #e5d9ef;
+}
+
+tr:nth-child(even) {
+    background: #f7f1fb;
+}
+
+footer {
+    text-align: center;
+    background: var(--dark);
+    color: white;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.small {
+    color: #795c91;
+    font-size: 13px;
+}
+
+@media(max-width:600px) {
+    header h1 {
+        font-size: 24px;
+    }
+
+    .container {
+        padding: 12px;
+    }
+
+    .card {
+        padding: 17px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>QUEENS COLLEGE</h1>
+    <p>Student Management System</p>
+    <p>Academic Excellence • Achievement • Success</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Welcome to Queens College</h2>
+        <p>Manage learners, capture marks and view academic rankings using the system below.</p>
+        <p class="small">Student Management Portal</p>
+    </div>
+
+    <div class="card">
+        <h2>Main Menu</h2>
+        <div class="menu">
+            <button onclick="showSection('add')">1. Add Learner</button>
+            <button onclick="showSection('mark')">2. Add Mark</button>
+            <button onclick="showSection('rename')">3. Rename Learner</button>
+            <button onclick="showSection('delete')">4. Delete Learner</button>
+            <button onclick="showSection('find')">5. Find by Name</button>
+            <button onclick="showSection('ranking')">6. Show Ranking</button>
+            <button onclick="showSection('all')">View All Learners</button>
+        </div>
+    </div>
+
+    <div class="card action" id="add">
+        <h2>Add Learner</h2>
+        <input id="addNumber" placeholder="Student number (7 digits)" maxlength="7">
+        <input id="addName" placeholder="Learner's full name">
+        <button onclick="addLearner()">Add Learner</button>
+        <div id="addResult"></div>
+    </div>
+
+    <div class="card action" id="mark">
+        <h2>Add Mark</h2>
+        <input id="markNumber" placeholder="Student number (7 digits)" maxlength="7">
+        <input id="markValue" type="number" placeholder="Mark (0-100)" min="0" max="100">
+        <button onclick="addMark()">Save Mark</button>
+        <div id="markResult"></div>
+    </div>
+
+    <div class="card action" id="rename">
+        <h2>Rename Learner</h2>
+        <input id="renameNumber" placeholder="Student number" maxlength="7">
+        <input id="newName" placeholder="New learner name">
+        <button onclick="renameLearner()">Rename Learner</button>
+        <div id="renameResult"></div>
+    </div>
+
+    <div class="card action" id="delete">
+        <h2>Delete Learner</h2>
+        <input id="deleteNumber" placeholder="Student number" maxlength="7">
+        <button onclick="deleteLearner()">Delete Learner</button>
+        <div id="deleteResult"></div>
+    </div>
+
+    <div class="card action" id="find">
+        <h2>Find Learner</h2>
+        <input id="searchName" placeholder="Enter name to search">
+        <button onclick="findLearner()">Search</button>
+        <div id="findResult"></div>
+    </div>
+
+    <div class="card action" id="ranking">
+        <h2>Academic Rankings</h2>
+        <button onclick="showRanking()">Display Rankings</button>
+        <div id="rankingResult"></div>
+    </div>
+
+    <div class="card action" id="all">
+        <h2>All Learners</h2>
+        <button onclick="showAll()">Display Learners</button>
+        <div id="allResult"></div>
+    </div>
+
+    <div class="card">
+        <h2>School Statistics</h2>
+        <p>Total Learners: <strong id="totalLearners">0</strong></p>
+        <p>Total Marks Captured: <strong id="totalMarks">0</strong></p>
+    </div>
+
+</div>
+
+<footer>
+    <h3>QUEENS COLLEGE</h3>
+    <p>Striving for Excellence in Education</p>
+    <p class="small">Student Management System © 2026</p>
+</footer>
+
+<script>
+
+// Learner records
+let learners = {};
+
+function showSection(section) {
+    document.querySelectorAll(".action").forEach(item => {
+        item.classList.remove("active");
+    });
+
+    document.getElementById(section).classList.add("active");
+}
+
+// Validate student number
+function isValidNumber(number) {
+    return /^\d{7}$/.test(number);
+}
+
+// Add learner
+function addLearner() {
+    let number = document.getElementById("addNumber").value.trim();
+    let name = document.getElementById("addName").value.trim();
+
+    if (!isValidNumber(number) || name === "") {
+        message("addResult", "Invalid number or name.");
+        return;
+    }
+
+    if (learners[number]) {
+        message("addResult", "That student number already exists.");
+        return;
+    }
+
+    learners[number] = {
+        name: name,
+        marks: []
+    };
+
+    message("addResult", "Learner successfully added!");
+    updateStatistics();
+    clearInputs(["addNumber", "addName"]);
+}
+
+// Add mark
+function addMark() {
+    let number = document.getElementById("markNumber").value.trim();
+    let markText = document.getElementById("markValue").value.trim();
+    let mark = Number(markText);
+
+    if (!/^\d+$/.test(markText) || mark > 100) {
+        message("markResult", "Invalid mark. Enter a number between 0 and 100.");
+        return;
+    }
+
+    if (!learners[number]) {
+        message("markResult", "No such learner.");
+        return;
+    }
+
+    learners[number].marks.push(mark);
+
+    message("markResult", "Mark successfully added!");
+    updateStatistics();
+    clearInputs(["markNumber", "markValue"]);
+}
+
+// Rename learner
+function renameLearner() {
+    let number = document.getElementById("renameNumber").value.trim();
+    let name = document.getElementById("newName").value.trim();
+
+    if (!learners[number]) {
+        message("renameResult", "No such learner.");
+        return;
+    }
+
+    if (name === "") {
+        message("renameResult", "Please enter a name.");
+        return;
+    }
+
+    learners[number].name = name;
+
+    message("renameResult", "Learner successfully renamed!");
+    clearInputs(["renameNumber", "newName"]);
+}
+
+// Delete learner
+function deleteLearner() {
+    let number = document.getElementById("deleteNumber").value.trim();
+
+    if (!learners[number]) {
+        message("deleteResult", "No such learner.");
+        return;
+    }
+
+    delete learners[number];
+
+    message("deleteResult", "Learner successfully deleted!");
+    updateStatistics();
+    clearInputs(["deleteNumber"]);
+}
+
+// Find learner by name
+function findLearner() {
+    let text = document.getElementById("searchName").value.trim().toLowerCase();
+
+    let matches = Object.entries(learners).filter(([number, learner]) =>
+        learner.name.toLowerCase().includes(text)
+    );
+
+    if (matches.length === 0) {
+        message("findResult", "No match found.");
+        return;
+    }
+
+    let output = "<table><tr><th>Number</th><th>Name</th><th>Marks</th></tr>";
+
+    matches.forEach(([number, learner]) => {
+        output += `<tr>
+            <td>${number}</td>
+            <td>${escapeHTML(learner.name)}</td>
+            <td>${learner.marks.join(", ") || "No marks"}</td>
+        </tr>`;
+    });
+
+    output += "</table>";
+    document.getElementById("findResult").innerHTML = output;
+}
+
+// Calculate average
+function learnerAverage(number) {
+    let marks = learners[number].marks;
+
+    if (marks.length === 0) {
+        return null;
+    }
+
+    return marks.reduce((total, mark) => total + mark, 0) / marks.length;
+}
+
+// Display ranking
+function showRanking() {
+    let rows = Object.keys(learners)
+        .map(number => ({
+            number: number,
+            name: learners[number].name,
+            average: learnerAverage(number)
+        }))
+        .filter(learner => learner.average !== null);
+
+    rows.sort((a, b) => b.average - a.average);
+
+    if (rows.length === 0) {
+        message("rankingResult", "No marks captured yet.");
+        return;
+    }
+
+    let output = "<table><tr><th>Rank</th><th>Number</th><th>Name</th><th>Average</th></tr>";
+
+    rows.forEach((learner, index) => {
+        output += `<tr>
+            <td>${index + 1}</td>
+            <td>${learner.number}</td>
+            <td>${escapeHTML(learner.name)}</td>
+            <td>${learner.average.toFixed(1)}%</td>
+        </tr>`;
+    });
+
+    output += "</table>";
+
+    document.getElementById("rankingResult").innerHTML = output;
+}
+
+// Display all learners
+function showAll() {
+    let entries = Object.entries(learners);
+
+    if (entries.length === 0) {
+        message("allResult", "No learners registered yet.");
+        return;
+    }
+
+    let output = "<table><tr><th>Number</th><th>Name</th><th>Marks</th><th>Average</th></tr>";
+
+    entries.forEach(([number, learner]) => {
+        let average = learnerAverage(number);
+
+        output += `<tr>
+            <td>${number}</td>
+            <td>${escapeHTML(learner.name)}</td>
+            <td>${learner.marks.join(", ") || "No marks"}</td>
+            <td>${average === null ? "N/A" : average.toFixed(1) + "%"}</td>
+        </tr>`;
+    });
+
+    output += "</table>";
+
+    document.getElementById("allResult").innerHTML = output;
+}
+
+// Update statistics
+function updateStatistics() {
+    document.getElementById("totalLearners").textContent =
+        Object.keys(learners).length;
+
+    let total = 0;
+
+    Object.values(learners).forEach(learner => {
+        total += learner.marks.length;
+    });
+
+    document.getElementById("totalMarks").textContent = total;
+}
+
+// Display messages
+function message(id, text) {
+    document.getElementById(id).innerHTML =
+        `<div class="result">${escapeHTML(text)}</div>`;
+}
+
+// Prevent HTML injection in displayed names
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+// Clear input fields
+function clearInputs(ids) {
+    ids.forEach(id => {
+        document.getElementById(id).value = "";
+    });
+}
+
+</script>
+
+</body>
+</html>
